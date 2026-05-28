@@ -53,10 +53,19 @@ public class PlayerClick : MonoBehaviour
                 v3.y = target.y;
                 v3.z = Z;
 
-                Lway.Add(v3);
 
-                DrawLine(Lway[Lway.Count - 1], Lway[Lway.Count - 2]);
-
+                if (Data.TC < Data.CC)
+                {
+                    Data.TC++;
+                    Debug.Log(Data.TC);
+                    Lway.Add(v3);
+                    DrawLine(Lway[Lway.Count - 1], Lway[Lway.Count - 2]);
+                }
+                else
+                {
+                    Debug.Log("end points");
+                }
+                
                 if (start == false)
                 {
                     start = true;

@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerMove : MonoBehaviour
+public class PlayerMove : CSoundManager
 {
-    private bool isMoving = false;
+    public bool isMoving = false;
     private Vector3 targetPosition = new Vector3();
     private float speed = 3.5f;
 
@@ -34,6 +34,7 @@ public class PlayerMove : MonoBehaviour
         if (transform.position == targetPosition)
         {
             isMoving = false;
+            StopSound();
 
             if (gameObject.GetComponent<PlayerClick>().Lline.Count > 1)
             {
@@ -54,8 +55,18 @@ public class PlayerMove : MonoBehaviour
             else
             {
                 gameObject.GetComponent<PlayerClick>().Start();
+                
             }
 
+            //Debug.Log("CC = " + Data.CC.ToString() + " CS = " + Data.CS.ToString() + " CG = " + Data.CG.ToString() + " TC = " + Data.TC.ToString());
+            if ((Data.TC >= Data.CC) && (Data.CG < Data.CC-1) && (gameObject.GetComponent<PlayerClick>().Lway.Count == 1))
+            {
+                //Debug.Log("Game Over");
+                Data.result = -1;
+                gameObject.GetComponent<PlayerGet>().StopGame();
+                PlaySound(CS.MainAudio[(int)CS.M.a01gameover], 0.75f, false, 1.0f);
+                StartCoroutine(gameObject.GetComponent<PlayerGet>().WaitLoad());
+            }
         }
     }
 
@@ -64,5 +75,7 @@ public class PlayerMove : MonoBehaviour
         targetPosition = gameObject.GetComponent<PlayerClick>().Lway[0];
 
         isMoving = true;
+        PlaySound(CS.MainAudio[(int)CS.M.a08playermove], 0.75f, true, 1.0f, 0.01f);
+        //PlaySound(CS.MainAudio[(int)CS.M.a08playermove], 0.75f, true, 1.0f);
     }
 }

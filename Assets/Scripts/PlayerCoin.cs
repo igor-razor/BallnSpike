@@ -25,6 +25,7 @@ public class PlayerCoin : MonoBehaviour
     {
         counter++;
         stext = "Coins: " + counter;
+        Data.CG = counter;
     }
 
     public void StopGame(int i)

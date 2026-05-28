@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class PlayerGet : MonoBehaviour
+public class PlayerGet : CSoundManager
 {
     public int tec_coins = 0;
     private float wait_sec = 2.0f;
@@ -30,7 +30,9 @@ public class PlayerGet : MonoBehaviour
         StartCoroutine(WaitLoad());
         GenFrags();
         StopGame();
-        gameObject.GetComponent<Renderer>().enabled = false;        
+        gameObject.GetComponent<Renderer>().enabled = false;
+        PlaySound(CS.MainAudio[(int)CS.M.a04boomhit], 0.75f, false, 1.0f);
+        PlaySound(CS.MainAudio[(int)CS.M.a01gameover], 0.75f, false, 1.0f, CS.MainAudio[(int)CS.M.a04boomhit].length + 0.5f);
     }
 
     private void TriggerCoin(Collider other)
@@ -45,12 +47,17 @@ public class PlayerGet : MonoBehaviour
         {
             //Debug.Log("WIN");
             Data.result = 1;
+            PlaySound(CS.MainAudio[(int)CS.M.a06wingame], 0.75f, false, 1.0f);
             StopGame();
-            StartCoroutine(WaitLoad());                    
+            StartCoroutine(WaitLoad());
         }
+
+        PlaySound(CS.MainAudio[(int)CS.M.a05getbonus], 0.75f, false, 1.0f);
+        if (gameObject.GetComponent<PlayerMove>().isMoving == true)
+        { PlaySound(CS.MainAudio[(int)CS.M.a08playermove], 0.75f, true, 1.0f, CS.MainAudio[(int)CS.M.a05getbonus].length + 0.05f); }
     }
 
-    private void StopGame()
+    public void StopGame()
     {
         gameObject.GetComponent<PlayerMove>().StopGame();
         gameObject.GetComponent<PlayerMove>().enabled = false;
@@ -63,7 +70,7 @@ public class PlayerGet : MonoBehaviour
         gameObject.GetComponent<SphereCollider>().enabled = false;
     }
 
-    private IEnumerator WaitLoad()
+    public IEnumerator WaitLoad()
     {
         yield return new WaitForSeconds(wait_sec);
         SceneManager.LoadScene("MenuScene", LoadSceneMode.Single);

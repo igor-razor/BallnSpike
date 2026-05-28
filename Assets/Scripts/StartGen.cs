@@ -11,12 +11,12 @@ public class StartGen : MonoBehaviour
     private int countH = 9;
 
     private float Z = 1;
-
+    public GameObject goPlayer = null;
     private List<Vector2> LRndPos = new List<Vector2>();
 
     private Vector3 v3 = new Vector3();
     private Vector2 v2 = new Vector2();
-
+    
     void Start()
     {
         //GenCorners();
@@ -26,7 +26,8 @@ public class StartGen : MonoBehaviour
         GenPlayer();
         GenCoins(Data.CC);
         GenSpikes(Data.CS);
-        
+        Data.TC = 0;
+        Data.CG = 0;
     }
 
     private void GenPlane()
@@ -67,8 +68,10 @@ public class StartGen : MonoBehaviour
         goUnit.AddComponent<Rigidbody>().useGravity = false;
         goUnit.GetComponent<Rigidbody>().isKinematic = true;
 
-        goUnit.transform.position = GetRndPos();        
+        goUnit.transform.position = GetRndPos();
+        goPlayer = goUnit;
 
+        goUnit.AddComponent<AudioSource>();
     }
 
     private Vector3 rotCoin = new Vector3(90, 0, 0);
@@ -87,7 +90,7 @@ public class StartGen : MonoBehaviour
             
             goUnit.transform.position = GetRndPos();
 
-            goUnit.AddComponent<Rotation>();
+            goUnit.AddComponent<Rotation>()._goPlayer = goPlayer;
         }
     }
 
@@ -100,7 +103,7 @@ public class StartGen : MonoBehaviour
             goUnit.GetComponent<Renderer>().material.color = Color.red;
             goUnit.transform.position = GetRndPos();
 
-            goUnit.AddComponent<Rotation>();
+            goUnit.AddComponent<Rotation>()._goPlayer = goPlayer;
         }
     }
 
